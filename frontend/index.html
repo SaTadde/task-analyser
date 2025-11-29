@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Task Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="background-orbit"></div>
+  <div class="background-glow"></div>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="logo-block">
+        <div class="logo-orb"></div>
+        <div>
+          <h1>Smart Task Analyzer</h1>
+          <p class="subtitle">Intelligent priority scoring for your tasks</p>
+        </div>
+      </div>
+
+      <div class="strategy-switch">
+        <label for="strategySelect">Strategy</label>
+        <select id="strategySelect">
+          <option value="smart">Smart Balance</option>
+          <option value="fastest">Fastest Wins</option>
+          <option value="high_impact">High Impact</option>
+          <option value="deadline">Deadline Driven</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- INPUT PANEL -->
+      <section class="panel panel-input">
+        <h2 class="panel-title">Input Tasks</h2>
+        <p class="panel-helper">Add tasks one by one or paste a JSON array for bulk input.</p>
+
+        <form id="taskForm" class="task-form">
+          <div class="field-group">
+            <label for="title">Title<span class="required">*</span></label>
+            <input id="title" type="text" placeholder="Fix login bug" />
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="due_date">Due Date<span class="required">*</span></label>
+              <input id="due_date" type="date" />
+            </div>
+            <div class="field-group">
+              <label for="estimated_hours">Estimated Hours<span class="required">*</span></label>
+              <input id="estimated_hours" type="number" min="0" step="0.5" placeholder="3" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="importance">Importance (1–10)<span class="required">*</span></label>
+              <input id="importance" type="number" min="1" max="10" placeholder="8" />
+            </div>
+            <div class="field-group">
+              <label for="dependencies">Dependencies (IDs, comma-separated)</label>
+              <input id="dependencies" type="text" placeholder="e.g. 1, 2" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary-btn">
+              + Add Task
+            </button>
+            <button type="button" id="clearTasksBtn" class="btn ghost-btn">
+              Clear All
+            </button>
+            <button type="button" id="openJsonModalBtn" class="btn secondary-btn">
+              Paste JSON
+            </button>
+          </div>
+        </form>
+
+        <div class="task-list-container">
+          <div class="task-list-header">
+            <h3>Pending Tasks (<span id="taskCount">0</span>)</h3>
+          </div>
+          <div id="taskList" class="task-list-empty">
+            No tasks added yet. Start by using the form above.
+          </div>
+        </div>
+      </section>
+
+      <!-- OUTPUT PANEL -->
+      <section class="panel panel-output">
+        <div class="panel-output-header">
+          <h2 class="panel-title">Analysis Results</h2>
+          <div class="output-actions">
+            <button id="analyzeBtn" class="btn primary-btn">
+              Analyze Tasks
+            </button>
+            <button id="suggestBtn" class="btn subtle-btn">
+              Suggest Today’s Top 3
+            </button>
+          </div>
+        </div>
+
+        <div id="statusBar" class="status-bar">
+          <span id="statusMessage">Waiting for input…</span>
+          <span id="loadingIndicator" class="loading-indicator hidden">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </span>
+        </div>
+
+        <div id="resultsContainer" class="results-container empty-state">
+          <div class="empty-card">
+            <h3>No results yet</h3>
+            <p>Add some tasks on the left and click <strong>Analyze Tasks</strong> to see priorities.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast / Popup -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- JSON BULK MODAL -->
+  <div id="jsonModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Paste Tasks JSON</h3>
+        <button id="closeJsonModalBtn" class="icon-btn" aria-label="Close">&times;</button>
+      </div>
+      <p class="modal-helper">
+        Paste a JSON array of tasks (same format as the API). Existing tasks will be replaced.
+      </p>
+      <textarea id="jsonInput" rows="10" class="json-input" placeholder='[
+  {
+    "title": "Fix login bug",
+    "due_date": "2025-11-30",
+    "estimated_hours": 3,
+    "importance": 8,
+    "dependencies": []
+  }
+]'></textarea>
+      <div class="modal-actions">
+        <button id="applyJsonBtn" class="btn primary-btn">Load Tasks</button>
+        <button id="cancelJsonBtn" class="btn ghost-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
