@@ -819,6 +819,8 @@ input, textarea, select {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    position: relative !important;
+    overflow: visible !important;
   }
 
   .output-actions .btn {
@@ -1011,4 +1013,33 @@ input, textarea, select {
 
 .hidden {
   display: none;
+}
+
+.helper-bubble {
+  position: absolute !important;
+  top: -10px;
+  right: 0;
+  background: #2563eb;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+  z-index: 999 !important;
+  animation: floatPulse 1.8s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.helper-bubble.show {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+@keyframes floatPulse {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
 }

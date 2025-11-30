@@ -156,6 +156,7 @@ taskForm.addEventListener("submit", (e) => {
 
   showToast("Task added.", "success");
   statusMessageEl.textContent = "Tasks added. Ready to analyze.";
+  showAnalyzeHint();
 });
 
 clearTasksBtn.addEventListener("click", () => {
@@ -222,14 +223,17 @@ applyJsonBtn.addEventListener("click", () => {
 
     tasks = cleaned;
     renderPendingTasks();
+    
     closeJsonModal();
     showToast("Tasks loaded from JSON.", "success");
     statusMessageEl.textContent = "Tasks loaded. Ready to analyze.";
+    showAnalyzeHint();
   } catch (err) {
     console.error("JSON parse error:", err);
     showToast(err.message || "Invalid JSON input.", "error");
   }
 });
+
 
 // ====== RENDER RESULTS ======
 function renderResultsFromArray(taskArray) {
@@ -444,6 +448,19 @@ async function suggestTasks() {
     showToast(err.message || "Failed to fetch suggestions.", "error");
   }
 }
+
+function showAnalyzeHint() {
+  const bubble = document.getElementById("helperBubble");
+  if (!bubble) return;
+
+  bubble.classList.add("show");
+
+  setTimeout(() => {
+    bubble.classList.remove("show");
+  }, 5000);
+}
+
+
 
 // ====== BUTTON HANDLERS ======
 analyzeBtn.addEventListener("click", analyzeTasks);
