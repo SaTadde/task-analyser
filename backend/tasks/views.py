@@ -33,12 +33,9 @@ class AnalyzeTasks(APIView):
         # ---------------------------------------
         # STEP 2: CIRCULAR DEPENDENCY DETECTION
         # ---------------------------------------
-        if TASK_ANALYZER_CONFIG["CHECK_CIRCULAR_DEPENDENCIES"]:
-            if detect_cycle(validated_tasks):
-                return Response(
-                    {"error": "Circular dependency detected"},
-                    status=400
-                )
+        # STEP 2: CIRCULAR DEPENDENCY DETECTION (new behavior)
+        has_cycle, cycle_nodes = detect_cycle(validated_tasks)
+        
 
         # ---------------------------
         # STEP 3: APPLY STRATEGY
@@ -70,7 +67,12 @@ class AnalyzeTasks(APIView):
                 reverse=True
             )
 
-        return Response(sorted_tasks)
+        return Response({
+            "tasks": sorted_tasks,
+            "has_cycle": has_cycle,
+            "cycle_nodes": cycle_nodes
+        })
+
 
 
 class SuggestTasks(APIView):
@@ -93,12 +95,13 @@ class SuggestTasks(APIView):
         # ---------------------------------------
         # STEP 2: CIRCULAR DEPENDENCY DETECTION
         # ---------------------------------------
-        if TASK_ANALYZER_CONFIG["CHECK_CIRCULAR_DEPENDENCIES"]:
-            if detect_cycle(validated_tasks):
-                return Response(
-                    {"error": "Circular dependency detected"},
-                    status=400
-                )
+        # if TASK_ANALYZER_CONFIG["CHECK_CIRCULAR_DEPENDENCIES"]:
+        #     if detect_cycle(validated_tasks):
+        #         return Response(
+        #             {"error": "Circular dependency detected"},
+        #             status=400
+        #         )
+        has_cycle, cycle_nodes = detect_cycle(validated_tasks)
 
         # ---------------------------
         # STEP 3: SMART SCORE
@@ -117,5 +120,8 @@ class SuggestTasks(APIView):
 
         return Response({
             "suggested_tasks": top3,
+            "has_cycle": has_cycle,
+            "cycle_nodes": cycle_nodes,
             "note": "Top 3 tasks using Smart Balance scoring."
-        })
+    })
+

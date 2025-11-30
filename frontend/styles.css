@@ -826,3 +826,189 @@ input, textarea, select {
     justify-content: center;
   }
 }
+
+.cycle-warning {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fecaca;
+  font-size: 0.9rem;
+}
+
+.cycle-task {
+  border: 1px solid rgba(239,68,68,0.7) !important;
+  box-shadow: 0 0 10px rgba(239,68,68,0.4);
+}
+
+.hidden {
+  display: none;
+}
+.eisenhower-matrix {
+  margin-top: 24px;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 14px;
+  border: 1px solid #e1e1e1;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  animation: fadeIn 0.5s ease;
+}
+
+.matrix-title {
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 14px;
+}
+
+.matrix-cell {
+  background: white;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #dddddd;
+  min-height: 150px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.matrix-cell:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+
+.matrix-cell h4 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.matrix-list {
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+  color: #444;
+}
+
+.matrix-list div {
+  background: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border-left: 4px solid #ccc;
+}
+
+.do-now { border-left: 5px solid #d9534f; }      /* urgent + important */
+.schedule { border-left: 5px solid #0275d8; }    /* not urgent but important */
+.delegate { border-left: 5px solid #f0ad4e; }    /* urgent but low importance */
+.eliminate { border-left: 5px solid #5bc0de; }   /* neither */
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* ===========================================================
+   COMPACT + CUTE + ANIMATED EISENHOWER MATRIX
+   =========================================================== */
+
+.eisenhower-matrix {
+  margin-top: 20px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  border: 1px solid rgba(200, 200, 200, 0.45);
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+  animation: fadeInMatrix 0.45s ease;
+}
+
+@keyframes fadeInMatrix {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.matrix-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 14px;
+  color: #333;
+  letter-spacing: 0.2px;
+}
+
+/* Compact grid */
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Compact floating cell */
+.matrix-cell {
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #ffffff, #f7f7f7);
+  border: 1px solid rgba(210, 210, 210, 0.7);
+  min-height: 110px; /* smaller height */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* Elegant micro-hover */
+.matrix-cell:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.matrix-cell h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #222;
+}
+
+/* Cute animated task pill */
+.matrix-list div {
+  background: #fdfdfd;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border-left: 4px solid #bbb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  animation: popIn 0.28s ease forwards;
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+@keyframes popIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* No heavy quadrant colors — subtle pastel only */
+.do-now { border-left-color: #e66; }
+.schedule { border-left-color: #66a1e6; }
+.delegate { border-left-color: #e6b85c; }
+.eliminate { border-left-color: #7bd5d0; }
+
+.hidden {
+  display: none;
+}

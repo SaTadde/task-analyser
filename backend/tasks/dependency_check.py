@@ -1,29 +1,34 @@
 def detect_cycle(tasks):
-    # Build adjacency list
-    graph = {t["title"]: t.get("dependencies", []) for t in tasks}
+    graph = {}
+    for t in tasks:
+        graph[t["title"]] = t.get("dependencies", [])
 
     visited = set()
-    recursion_stack = set()
+    stack = set()
+    cycle_path = []
 
     def dfs(node):
-        if node in recursion_stack:
-            return True  # cycle exists
-        
+        if node in stack:
+            cycle_path.append(node)
+            return True
+
         if node in visited:
             return False
 
         visited.add(node)
-        recursion_stack.add(node)
+        stack.add(node)
 
-        for neighbor in graph.get(node, []):
-            if dfs(neighbor):
+        for dep in graph.get(node, []):
+            if dfs(dep):
+                cycle_path.append(node)
                 return True
 
-        recursion_stack.remove(node)
+        stack.remove(node)
         return False
 
     for node in graph:
         if dfs(node):
-            return True
+            cycle_path.reverse()
+            return True, cycle_path
 
-    return False
+    return False, []

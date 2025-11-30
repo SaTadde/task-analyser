@@ -112,6 +112,7 @@
             <span class="dot"></span><span class="dot"></span><span class="dot"></span>
           </span>
         </div>
+        <div id="cycleWarning" class="cycle-warning hidden"></div>
 
         <div id="resultsContainer" class="results-container empty-state">
           <div class="empty-card">
@@ -119,6 +120,33 @@
             <p>Add some tasks on the left and click <strong>Analyze Tasks</strong> to see priorities.</p>
           </div>
         </div>
+        <!-- EISENHOWER MATRIX VIEW -->
+        <div id="eisenhowerMatrix" class="eisenhower-matrix hidden">
+        <h3 class="matrix-title">Eisenhower Matrix (Urgency × Importance)</h3>
+
+        <div class="matrix-grid">
+            <div class="matrix-cell do-now">
+            <h4>Do Now</h4>
+            <div class="matrix-list" id="doNowList"></div>
+            </div>
+
+            <div class="matrix-cell schedule">
+            <h4>Schedule</h4>
+            <div class="matrix-list" id="scheduleList"></div>
+            </div>
+
+            <div class="matrix-cell delegate">
+            <h4>Delegate</h4>
+            <div class="matrix-list" id="delegateList"></div>
+            </div>
+
+            <div class="matrix-cell eliminate">
+            <h4>Eliminate</h4>
+            <div class="matrix-list" id="eliminateList"></div>
+            </div>
+        </div>
+        </div>
+
       </section>
     </main>
   </div>

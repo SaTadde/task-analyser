@@ -270,6 +270,14 @@ function renderResultsFromArray(taskArray) {
 
     const card = document.createElement("article");
     card.className = `task-card ${priorityClass}`;
+    // Highlight circular dependency tasks
+    if (
+        window.lastCycleNodes && 
+        window.lastCycleNodes.includes(task.title)
+    ) {
+        card.classList.add("cycle-task");
+    }
+
     card.innerHTML = `
       <div class="task-main">
         <div class="task-title-row">
@@ -304,6 +312,42 @@ function renderResultsFromArray(taskArray) {
     resultsContainer.appendChild(card);
   });
 }
+function renderEisenhowerMatrix(tasks) {
+  const matrix = document.getElementById("eisenhowerMatrix");
+
+  // Clear previous
+  ["doNowList", "scheduleList", "delegateList", "eliminateList"]
+    .forEach(id => document.getElementById(id).innerHTML = "");
+
+  if (!tasks || tasks.length === 0) {
+    matrix.classList.add("hidden");
+    return;
+  }
+
+  matrix.classList.remove("hidden");
+
+  tasks.forEach(task => {
+    const today = new Date();
+    const due = new Date(task.due_date);
+    const daysLeft = Math.round((due - today) / (1000 * 60 * 60 * 24));
+
+    const urgent = daysLeft <= 2;       // urgent = due soon
+    const important = task.importance >= 6;
+
+    const div = document.createElement("div");
+    div.textContent = `${task.title} (${task.due_date})`;
+
+    if (urgent && important) {
+      document.getElementById("doNowList").appendChild(div);
+    } else if (!urgent && important) {
+      document.getElementById("scheduleList").appendChild(div);
+    } else if (urgent && !important) {
+      document.getElementById("delegateList").appendChild(div);
+    } else {
+      document.getElementById("eliminateList").appendChild(div);
+    }
+  });
+}
 
 // ====== API CALLS ======
 async function analyzeTasks() {
@@ -335,7 +379,22 @@ async function analyzeTasks() {
     }
 
     const data = await res.json();
-    renderResultsFromArray(data);
+    /* ===== CYCLE WARNING UI HERE ===== */
+    const cycleWarning = document.getElementById("cycleWarning");
+    if (data.has_cycle) {
+        cycleWarning.classList.remove("hidden");
+        cycleWarning.innerHTML =
+            "⚠️ Circular dependency detected:<br><strong>" +
+            data.cycle_nodes.join(", ") +
+            "</strong>";
+    } else {
+    cycleWarning.classList.add("hidden");
+    }
+    window.lastCycleNodes = data.cycle_nodes || [];
+
+ /* ================================= */
+    renderResultsFromArray(data.tasks);
+    renderEisenhowerMatrix(data.tasks);
     setLoading(false, "Analysis complete.");
     showToast("Tasks analyzed successfully!", "success");
   } catch (err) {
@@ -376,6 +435,7 @@ async function suggestTasks() {
     }
 
     renderResultsFromArray(data.suggested_tasks);
+    renderEisenhowerMatrix(data.suggested_tasks);
     setLoading(false, "Top 3 suggestions loaded.");
     showToast("Loaded today’s top 3 tasks.", "success");
   } catch (err) {
@@ -388,6 +448,8 @@ async function suggestTasks() {
 // ====== BUTTON HANDLERS ======
 analyzeBtn.addEventListener("click", analyzeTasks);
 suggestBtn.addEventListener("click", suggestTasks);
+
+
 
 // Initial render
 renderPendingTasks();
